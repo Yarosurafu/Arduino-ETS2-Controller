@@ -1,1 +1,0 @@
-C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\x64\Release\telemetry.dll
