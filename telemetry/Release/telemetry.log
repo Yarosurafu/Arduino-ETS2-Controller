@@ -1,0 +1,37 @@
+﻿  ComController.cpp
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.h(74,47): warning C4805: '|': unsafe mix of type 'unsigned char' and type 'bool' in operation
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(64,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(65,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(66,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(67,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(68,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(69,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(70,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(71,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(72,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(73,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(84,35): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(85,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(86,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(88,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(89,22): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(100,41): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(108,41): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(116,35): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(124,33): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(130,29): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(131,34): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(139,29): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(140,34): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+  telemetry.cpp
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.h(74,47): warning C4805: '|': unsafe mix of type 'unsigned char' and type 'bool' in operation
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(12,1): warning C4005: 'WINVER': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(238): message : see previous definition of 'WINVER'
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(13,1): warning C4005: '_WIN32_WINNT': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(217): message : see previous definition of '_WIN32_WINNT'
+     Creating library C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\Release\telemetry.lib and object C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\Release\telemetry.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 52 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  telemetry.vcxproj -> C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\Release\telemetry.dll

@@ -1,0 +1,28 @@
+﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  telemetry.cpp
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(12,1): warning C4005: 'WINVER': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(238): message : see previous definition of 'WINVER'
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(13,1): warning C4005: '_WIN32_WINNT': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\sdkddkver.h(217): message : see previous definition of '_WIN32_WINNT'
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(96,13): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(174,43): warning C4244: 'argument': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\telemetry.cpp(175,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  ComController.cpp
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(39,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(40,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(41,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(42,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(43,41): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(44,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(45,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(46,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(47,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(48,42): warning C4244: '*=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(59,35): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(60,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(61,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(63,37): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\ComController.cpp(64,22): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+     Creating library C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\x64\Debug\telemetry.lib and object C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\x64\Debug\telemetry.exp
+  telemetry.vcxproj -> C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\x64\Debug\telemetry.dll
