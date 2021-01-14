@@ -1,2 +1,0 @@
-C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\Debug\telemetry.dll
-C:\Users\yarik\source\repos\ets_sdk_1_12\examples\telemetry\Debug\telemetry.pdb
