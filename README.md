@@ -92,7 +92,7 @@ Truck Simulator 2.
 <i>Вкладка давления</i></br></br>
 <img src="ReadMe_Assets/pc_cons.jpg" height="320px"></br>
 <i>Вкладка потребления топлива</i></br></br>
-<img src="ReadMe_Assets/pc.gif" height="320px">
+<img src="ReadMe_Assets/pc.gif" height="320px"></br>
 <i>Работа бортового ПК</i></br></br>
 </p>
 
