@@ -4,17 +4,17 @@
 #include <Servo.h>
 
 //-------------Номери пінів-------------------
-#define LEFT_TURN_PIN     22 //Лівий покажчик повороту
-#define RIGHT_TURN_PIN    38 //Правий покажчик повороту
-#define HIGHBEAM_PIN      26 //Покажчик дального світла фар
-#define HANDBRAKE_PIN     30 //Покажчик ручного гальма
-#define CHECK_ENGINE_PIN  34 //Покажчик несправності двигуна
-#define LOWBEAM_PIN       42 //Покажчик ближнього світла фар
-#define BATTERY_LOW_PIN   46 //Покажчик розрядженого акумулятора
-#define OIL_LOW_PIN       41 //Покажчик низького рівня мастила
-#define AIR_LOW_PIN       45 //Покажчик низкього тиску в гальмах
-#define SPEEDOMETER_PIN   A3 //Пін для спідометру
-#define TACHOMETER_PIN    A1 //Пін для тахометра
+#define LEFT_TURN_PIN     28 //Лівий покажчик повороту
+#define RIGHT_TURN_PIN    30 //Правий покажчик повороту
+#define HIGHBEAM_PIN      32 //Покажчик дального світла фар
+#define HANDBRAKE_PIN     34 //Покажчик ручного гальма
+#define CHECK_ENGINE_PIN  36 //Покажчик несправності двигуна
+#define LOWBEAM_PIN       38 //Покажчик ближнього світла фар
+#define BATTERY_LOW_PIN   40 //Покажчик розрядженого акумулятора
+#define OIL_LOW_PIN       42 //Покажчик низького рівня мастила
+#define AIR_LOW_PIN       44 //Покажчик низкього тиску в гальмах
+#define SPEEDOMETER_PIN   A1 //Пін для спідометру
+#define TACHOMETER_PIN    A0 //Пін для тахометра
 #define POTENTIOMETER_PIN A4
 //--------------------------------------------
 
