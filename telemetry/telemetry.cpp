@@ -4,14 +4,12 @@
  * Writes the output into file inside the current directory.
  */
 
-#include "ComController.h"
-
 // Windows stuff.
 
 #ifdef _WIN32
-#  define WINVER 0x0500
-#  define _WIN32_WINNT 0x0500
-#  include <windows.h>
+#define WINVER 0x0500
+#define _WIN32_WINNT 0x0500
+#include <windows.h>
 #endif
 
 #include <stdio.h>
@@ -27,6 +25,7 @@
 #include "eurotrucks2/scssdk_telemetry_eut2.h"
 #include "amtrucks/scssdk_ats.h"
 #include "amtrucks/scssdk_telemetry_ats.h"
+#include "ComController.h"
 #include <iostream>
 
 #define UNUSED(x)
@@ -56,29 +55,29 @@ struct telemetry_state_t
 	scs_timestamp_t raw_simulation_timestamp;
 	scs_timestamp_t raw_paused_simulation_timestamp;
 
-	bool	orientation_available;
-	float	heading;
-	float	pitch;
-	float	roll;
+	bool orientation_available;
+	float heading;
+	float pitch;
+	float roll;
 
-	float	speed;
-	float	rpm;
-	float	airPsi;
-	float	fuelAmount;
-	float	averageCons;
-	float	oilPressure;
-	float	oilTemp;
-	float	waterTemp;
-	float	fuelRange;
-	int		gear;
-	bool	leftBlinker;
-	bool	rightBlinker;
-	bool	lowbeam;
-	bool	highbeam;
-	bool	voltageWarning;
-	bool	airWarning;
-	bool	handbrake;
-	bool	cruise;
+	float speed;
+	float rpm;
+	float airPsi;
+	float fuelAmount;
+	float averageCons;
+	float oilPressure;
+	float oilTemp;
+	float waterTemp;
+	float fuelRange;
+	int gear;
+	bool leftBlinker;
+	bool rightBlinker;
+	bool lowbeam;
+	bool highbeam;
+	bool voltageWarning;
+	bool airWarning;
+	bool handbrake;
+	bool cruise;
 
 } telemetry;
 
@@ -101,14 +100,16 @@ SCSAPI_VOID telemetry_frame_start(const scs_event_t UNUSED(event), const void *c
 	// When we just initialized itself, assume that the time started
 	// just now.
 
-	if (last_timestamp == static_cast<scs_timestamp_t>(-1)) {
+	if (last_timestamp == static_cast<scs_timestamp_t>(-1))
+	{
 		last_timestamp = info->paused_simulation_time;
 	}
 
 	// The timer might be sometimes restarted (e.g. after load) while
 	// we want to provide continuous time on our output.
 
-	if (info->flags & SCS_TELEMETRY_FRAME_START_FLAG_timer_restart) {
+	if (info->flags & SCS_TELEMETRY_FRAME_START_FLAG_timer_restart)
+	{
 		last_timestamp = 0;
 	}
 
@@ -126,7 +127,8 @@ SCSAPI_VOID telemetry_frame_start(const scs_event_t UNUSED(event), const void *c
 
 SCSAPI_VOID telemetry_frame_end(const scs_event_t UNUSED(event), const void *const UNUSED(event_info), const scs_context_t UNUSED(context))
 {
-	/*game_log(SCS_LOG_TYPE_message, "===================================================");
+#ifdef DEBUG_LOG
+	game_log(SCS_LOG_TYPE_message, "===================================================");
 	game_log(SCS_LOG_TYPE_message, std::string("Air in psi == " + std::to_string(telemetry.airPsi)).c_str());
 	game_log(SCS_LOG_TYPE_message, std::string("Fuel amount == " + std::to_string(telemetry.fuelAmount)).c_str());
 	game_log(SCS_LOG_TYPE_message, std::string("Fuel average cons == " + std::to_string(telemetry.averageCons)).c_str());
@@ -134,9 +136,13 @@ SCSAPI_VOID telemetry_frame_end(const scs_event_t UNUSED(event), const void *con
 	game_log(SCS_LOG_TYPE_message, std::string("Oil pressure == " + std::to_string(telemetry.oilPressure)).c_str());
 	game_log(SCS_LOG_TYPE_message, std::string("Oil temp == " + std::to_string(telemetry.oilTemp)).c_str());
 	game_log(SCS_LOG_TYPE_message, std::string("Water temp == " + std::to_string(telemetry.waterTemp)).c_str());
-	game_log(SCS_LOG_TYPE_message, "===================================================");*/
-	if (!dashboard.isOpened()) dashboard.openCom();
-	if (dashboard.isOpened() && !output_paused) {
+	game_log(SCS_LOG_TYPE_message, "===================================================");
+#endif
+
+	if (!dashboard.isOpened())
+		dashboard.openCom();
+	if (dashboard.isOpened() && !output_paused)
+	{
 		dashboard.setSpeed(static_cast<unsigned char>(fabs(telemetry.speed) * 3.6));
 		dashboard.setRPM(static_cast<int>(telemetry.rpm / 10));
 		dashboard.setAirWarning(telemetry.airWarning);
@@ -155,13 +161,15 @@ SCSAPI_VOID telemetry_frame_end(const scs_event_t UNUSED(event), const void *con
 	}
 }
 
-SCSAPI_VOID telemetry_pause(const scs_event_t event, const void* const UNUSED(event_info), const scs_context_t UNUSED(context))
+SCSAPI_VOID telemetry_pause(const scs_event_t event, const void *const UNUSED(event_info), const scs_context_t UNUSED(context))
 {
 	output_paused = (event == SCS_TELEMETRY_EVENT_paused);
-	if (output_paused) {
+	if (output_paused)
+	{
 		game_log(SCS_LOG_TYPE_message, "Telemetry paused");
 	}
-	else {
+	else
+	{
 		game_log(SCS_LOG_TYPE_message, "Telemetry unpaused");
 	}
 }
@@ -190,7 +198,8 @@ SCSAPI_VOID telemetry_store_orientation(const scs_string_t name, const scs_u32_t
 	// This callback was registered with the SCS_TELEMETRY_CHANNEL_FLAG_no_value flag
 	// so it is called even when the value is not available.
 
-	if (! value) {
+	if (!value)
+	{
 		state->orientation_available = false;
 		return;
 	}
@@ -225,12 +234,12 @@ SCSAPI_VOID telemetry_store_s32(const scs_string_t name, const scs_u32_t index, 
 	*static_cast<int *>(context) = value->value_s32.value;
 }
 
-SCSAPI_VOID telemetry_store_bool(const scs_string_t /*name*/, const scs_u32_t /*index*/, const scs_value_t* const value, const scs_context_t context)
+SCSAPI_VOID telemetry_store_bool(const scs_string_t /*name*/, const scs_u32_t /*index*/, const scs_value_t *const value, const scs_context_t context)
 {
 	assert(value);
 	assert(value->type == SCS_VALUE_TYPE_bool);
 	assert(context);
-	*static_cast<bool*>(context) = (value->value_bool.value != 0);
+	*static_cast<bool *>(context) = (value->value_bool.value != 0);
 }
 
 /**
@@ -242,7 +251,8 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 {
 	// We currently support only one version.
 
-	if (version != SCS_TELEMETRY_VERSION_1_01) {
+	if (version != SCS_TELEMETRY_VERSION_1_01)
+	{
 		return SCS_RESULT_unsupported;
 	}
 
@@ -296,7 +306,6 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 		log_line("WARNING: Unsupported game, some features or values might behave incorrectly");
 	}*/
 
-
 	/*if (!dashboard.openCom()) {
 		version_params->common.log(SCS_LOG_TYPE_error, "Unable to open COM-port");
 		return SCS_RESULT_generic_error;
@@ -310,7 +319,8 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 		(version_params->register_for_event(SCS_TELEMETRY_EVENT_frame_end, telemetry_frame_end, NULL) == SCS_RESULT_ok) &&
 		(version_params->register_for_event(SCS_TELEMETRY_EVENT_paused, telemetry_pause, NULL) == SCS_RESULT_ok) &&
 		(version_params->register_for_event(SCS_TELEMETRY_EVENT_started, telemetry_pause, NULL) == SCS_RESULT_ok);
-	if (! events_registered) {
+	if (!events_registered)
+	{
 
 		// Registrations created by unsuccessfull initialization are
 		// cleared automatically so we can simply exit.
@@ -391,11 +401,11 @@ SCSAPI_VOID scs_telemetry_shutdown(void)
 #ifdef _WIN32
 BOOL APIENTRY DllMain(
 	HMODULE module,
-	DWORD  reason_for_call,
-	LPVOID reseved
-)
+	DWORD reason_for_call,
+	LPVOID reseved)
 {
-	if (reason_for_call == DLL_PROCESS_DETACH) {
+	if (reason_for_call == DLL_PROCESS_DETACH)
+	{
 		dashboard.closeCom();
 	}
 	return TRUE;
@@ -403,7 +413,7 @@ BOOL APIENTRY DllMain(
 #endif
 
 #ifdef __linux__
-void __attribute__ ((destructor)) unload(void)
+void __attribute__((destructor)) unload(void)
 {
 	finish_log();
 }

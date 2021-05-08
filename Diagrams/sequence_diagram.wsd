@@ -1,0 +1,5 @@
+@startuml sequence_diagram
+
+actor Trainee as "Учень"
+
+@enduml

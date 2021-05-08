@@ -59,7 +59,7 @@ ComController& ComController::setSpeed(unsigned char speed)
 {
     if (speed > 160) speed = 160;
     else if (speed < 0) speed = 0;
-    //---------Виправлення похибки---------
+    //---------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ---------
     if (speed <= 50);
     else if (speed <= 60) speed *= 1.016;
     else if (speed <= 70) speed *= 1.028;
@@ -80,7 +80,7 @@ ComController& ComController::setRPM(int RPM)
 {
     if (RPM > 400) RPM = 400;
     else if (RPM < 0) RPM = 0;
-    //---------Виправлення похибки---------
+    //---------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ---------
     if (RPM <= 150) RPM *= 0.93333;
     else if (RPM <= 200) RPM *= 0.96;
     else if (RPM <= 250) RPM *= 0.98;
@@ -158,7 +158,6 @@ ComController::~ComController()
 
 void ComController::readComName()
 {
-    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     LPCTSTR filename{ L"conf.txt" };
     HANDLE hFile = CreateFile(filename, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     const DWORD dwBytesToRead{ 12 };
