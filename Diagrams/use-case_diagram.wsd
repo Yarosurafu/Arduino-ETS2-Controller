@@ -1,0 +1,42 @@
+@startuml use-case_diagram
+
+left to right direction
+
+actor Trainee as "Учень"
+actor ETS2 as "Euro Truck Simulator 2"
+
+rectangle Trainer as "Тренажер" {
+    usecase wheel as "Повернути кермо"
+    usecase lowbeam as "Увімкнути тумблер
+    ближнього світла" 
+    usecase highbeam as "Увімкнути тумблер
+    дального світла"
+    usecase leftBlinker as "Увімкнути лівий
+    покажчик повороту"
+    usecase rightBlinker as "Увімкнути правий
+    покажчик повороту"
+    usecase accelerate as "Натиснути педаль газу"
+    usecase brake as "Натиснути педаль гальма" 
+    usecase readValues as "Зчитати дані з датчиків"
+    usecase receiveData as "Отримати cтан елементів
+    керування" 
+    usecase sendData as "Надіслати стан вантажівки"
+    usecase printData as "Вивести стан вантажівки
+    на панель керування"
+}
+
+Trainee -- wheel
+Trainee -- lowbeam
+Trainee -- highbeam
+Trainee -- leftBlinker
+Trainee -- rightBlinker
+Trainee -- accelerate
+Trainee -- brake
+
+receiveData .> printData : include
+sendData .> readValues : include
+
+ETS2 -- receiveData
+ETS2 -- sendData
+
+@enduml
