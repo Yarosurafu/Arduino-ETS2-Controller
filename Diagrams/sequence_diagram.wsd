@@ -1,8 +1,6 @@
 @startuml sequence_diagram
 
 actor Trainee as "Учень"
-<<<<<<< HEAD
-=======
 boundary ETS2 as "Euro Truck Simulator 2"
 boundary com as "Serial порт"
 boundary Mega as "Atmega2560"
@@ -37,6 +35,5 @@ loop Доки працює\nсимулятор
         return
     end  
 end
->>>>>>> dda8e7e... Create UML diagrams
 
 @enduml
