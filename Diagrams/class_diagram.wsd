@@ -1,0 +1,84 @@
+@startuml Class Diagram
+
+enum PacketInfo {
+    SYNC_FIRST
+    FLAGS_FIRST
+    FLAGS_SECOND
+    GEAR
+    AIR_PRESSURE_WHOLE
+    OIL_PRESSURE_WHOLE
+    OIL_TEMPERATURE
+    WATER_TEMPERATURE
+    SPEED
+    RPM_HIGH
+    RPM_LOW
+    FUEL_INSTANT_CONS_WHOLE
+    FUEL_INSTANT_CONS_FRACTIONAL
+    FUEL_AVG_CONS_WHOLE
+    FUEL_AVG_CONS_FRACTIONAL
+}
+
+enum FirstByteFlags {
+    ELECTRIC_ENABLED = 1
+    ENGINE_ENABLED = 2
+    LEFT_TURN = 4
+    RIGHT_TURN = 8
+    LIGHTS_BEAM_LOW = 16
+    LIGHTS_BEAM_HIGH = 32
+    BATTERY_VOLTAGE_WARNING = 64
+    AIR_PRESSURE_WARNING = 128
+}
+
+enum SecondByteFlags {
+    AIR_PRESSURE_EMERGENCY = 1
+    OIL_PRESSURE_WARNING = 2
+    WATER_TEMPERATURE_WARNING = 4
+    GEAR_SIGN = 8
+    HANDBRAKE = 16
+    CRUISE_ENABLED = 32
+}
+
+class ComController {
+    __ Private data __
+    -m_hComPort : HANDLE
+	-m_comName : LPCTSTR
+	-{static}PACKET_SIZE : const int
+	-m_packet : unsigned char[]
+	-m_comState : bool
+	-m_log : scs_log_t*
+
+    __ Methods __
+    -void readComName()
+    -std::wstring toWide(char* buffer, int size)
+    +ComController(scs_log_t* log)
+    +bool openCom()
+	+void closeCom()
+	+bool isOpened()
+    +ComController& writeToCom()
+    +ComController& setSpeed(unsigned char speed)
+    +ComController& setRPM(int RPM)
+    +ComController& setAirPressure(float airPressure)
+    +ComController& setOilPressure(float oilPressure)
+    +ComController& setWaterTemp(float waterTemp)
+    +ComController& setOilTemp(float oilTemp)
+    +ComController& setAvgCons(float avgCons)
+    +ComController& setInstCons(float instCons)
+    +ComController& setGear(int gear)
+    +ComController& setElectricEnabled(bool flag)
+    +ComController& setEngineEnabled(bool flag)
+    +ComController& setLeftBlinker(bool flag)
+    +ComController& setRightBlinker(bool flag)
+    +ComController& setLowbeam(bool flag)
+    +ComController& setHighbeam(bool flag)
+    +ComController& setVoltageWarning(bool flag)
+    +ComController& setAirWarning(bool flag)
+    +ComController& setHandbrake(bool flag)
+    +ComController& setCruise(bool flag)
+    +virtual ~ComController()
+}
+
+ComController *-- PacketInfo : contains >
+ComController *-- FirstByteFlags : contains >
+ComController *-- SecondByteFlags : contains >
+
+@enduml

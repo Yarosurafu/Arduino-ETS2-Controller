@@ -1,0 +1,39 @@
+@startuml sequence_diagram
+
+actor Trainee as "Учень"
+boundary ETS2 as "Euro Truck Simulator 2"
+boundary com as "Serial порт"
+boundary Mega as "Atmega2560"
+boundary Pro as "Atmega32u4"
+
+==Ініціалізація==
+Trainee --> ETS2 ++ : Запустити симулятор
+
+ETS2 --> com ++ : Відкрити послідовний порт
+
+Activate Mega
+Mega --> com : Відкрити послідовний порт
+
+Activate Pro
+Pro --> com : Відкрити послідовний порт
+
+==Основний цикл взаємодії==
+loop Доки працює\nсимулятор
+    Trainee --> Pro : Взаємодія з органами\nуправління
+    Pro --> com : Запис на послідовний\nпорт інформації про стан органів керування
+
+    ETS2 --> com : Запис стану вантажівки\nна COM-порт
+
+    Mega --> com : Зчитування даних про\nстан вантажівки
+    Mega --> Mega : Розшифровка даних з\nCOM-порта
+
+    alt Пакет даних цілий
+        Mega --> Mega ++ : Виведення стану вантажівки
+        Mega --> Mega : Подача напруги на\nсвітлодіоди
+        Mega --> Mega : Запис інформації\nна сервоприводи
+        Mega --> Mega : Виведення інформації\nна дисплей
+        return
+    end  
+end
+
+@enduml
