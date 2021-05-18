@@ -1,24 +1,64 @@
 #include <HID-Project.h>
 #include <HID-Settings.h>
 
-// -----{ Encoder data }-----
-const int kEncoderPinA = 2;             // Пины прерываний
-const int kEncoderPinB = 3;             // Пины прерываний
-volatile long kEncoderPauseMicros = 50; // Пауза для борьбы с дребезгом
-volatile long gEncoderLastTurnTime = 0; // Переменная для хранения времени последнего изменения
-volatile int gEncoderCount = 0;         // Счетчик оборотов
+//#define DEBUG
 
 #ifdef DEBUG
-int actualcount = 0; // Временная переменная определяющая изменение основного счетчика
+int gLeftTurnState = 0;
+int gRightTurnState = 0;
+int gHighBeamSignalState = 0;
 #endif
 
-volatile int gEncoderTurnState = 0; // Статус одного шага - от 0 до 4 в одну сторону, от 0 до -4 - в другую
-volatile int kEncoderPinAValue = 0; // Переменные хранящие состояние пина, для экономии времени
-volatile int kEncoderPinBValue = 0; // Переменные хранящие состояние пина, для экономии времени
+// -----{ Control buttons }-----
+// b- prefix means BUTTON
+// s- prefix means SWITCH
+const int kbLeftTurnPin = 9;
+const int kbRightTurnPin = 10;
+const int kbStartEnginePin = 0;         // Not connected yet
+const int kbHighbeamSignalPin = 7;
+const int kbEmergencyButtonPin = 0;     // Not connected yet
+const int ksWipersPin = 11;
+const int ksLowBeamPin = 0;             // Not connected yet
+const int ksHighBeamPin = 0;            // Not connected yet
+
+enum Buttons {
+    LEFT_TURN_BUTTON = 1,
+    RIGHT_TURN_BUTTON,
+    START_ENGINE_BUTTON,
+    HIGHBEAM_BUTTON,
+    LOWBEAM_BUTTON,
+    HIGHBEAM_SIGNAL_BUTTON,
+    EMERGENCY_BUTTON,
+    WIPERS_BUTTON
+};
+// -----------------------------
+
+// -----{ Encoder data }-----
+const int kEncoderPinA = 2;                     // Interrupt pin
+const int kEncoderPinB = 3;                     // Interrupt pin
+volatile const long kEncoderPauseMicros = 50;   // Pause for avoiding bounce
+volatile long gEncoderLastTurnTime = 0;         // Last change in micros
+volatile int gEncoderCount = 0;                 // Turn counter
+volatile int gEncoderTurnState = 0; // Turn state - [0;4] right, [-4;0] left
+volatile int kEncoderPinAValue = 0; // 'A' bus state
+volatile int kEncoderPinBValue = 0; // 'B' bus state
+
+volatile unsigned long gResetLastPress = 0;
+volatile bool gIsResetPressed = false;
 // ----------------------------
+
+// -----{ Pedals }-----
+const int kAcceleratorPin = 0; // Not connected yet
+const int kBrakePin = 0;       // Not connected yet
+const int kClutchPin = 0;      // Not connected yet
+// --------------------
 
 void setup()
 {
+    pinMode(kbLeftTurnPin, INPUT_PULLUP);
+    pinMode(kbRightTurnPin, INPUT_PULLUP);
+    pinMode(kbHighbeamSignalPin, INPUT_PULLUP);
+
     pinMode(kEncoderPinA, INPUT_PULLUP); // Пины в режим приема INPUT
     pinMode(kEncoderPinB, INPUT_PULLUP);
     digitalWrite(kEncoderPinA, HIGH);
@@ -26,6 +66,7 @@ void setup()
 
     attachInterrupt(1, checkEncoderPinA, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала
     attachInterrupt(0, checkEncoderPinB, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала
+    attachInterrupt(4, highBeamButton, CHANGE);
 
 #ifdef DEBUG
     Serial.begin(9600); // Включаем Serial
@@ -36,15 +77,58 @@ void setup()
 
 void loop()
 {
+    if(gIsResetPressed && (millis() - gResetLastPress > 10000)) {
+        gEncoderCount = 0;
+    }
+
+    setButton(LEFT_TURN_BUTTON, !digitalRead(kbLeftTurnPin));
+    setButton(RIGHT_TURN_BUTTON, !digitalRead(kbRightTurnPin));
+    setButton(HIGHBEAM_SIGNAL_BUTTON, !digitalRead(kbHighbeamSignalPin));
+
+    gEncoderCount = constrain(gEncoderCount, -900, 900);
+    Gamepad.xAxis(map(gEncoderCount, -900, 900, -32768, 32767));
+    Gamepad.write();
 
 #ifdef DEBUG
-    if (actualcount != gEncoderCount)
-    {                                // Чтобы не загружать ненужным выводом в Serial, выводим состояние
-        actualcount = gEncoderCount; // счетчика только в момент изменения
-        Serial.println(actualcount);
-    }
-#endif
+    gLeftTurnState = !digitalRead(kbLeftTurnPin);
+    gRightTurnState = !digitalRead(kbRightTurnPin);
+    gHighBeamSignalState = !digitalRead(kbHighbeamSignalPin);
 
+    Serial.print("\n---------------------\n");
+    Serial.print("gEncoderCount == ");
+    Serial.println(gEncoderCount);
+
+    Serial.print("Left turn == ");
+    Serial.println(gLeftTurnState);
+
+    Serial.print("Right turn == ");
+    Serial.println(gRightTurnState);
+
+    Serial.print("Highbeam signal == ");
+    Serial.println(gHighBeamSignalState);
+    Serial.print("---------------------");
+#endif
+}
+
+void setButton(uint8_t button, int signal) {
+    if(signal)
+        Gamepad.press(button);
+    else
+        Gamepad.release(button);
+    
+    //Gamepad.write();
+}
+
+void highBeamButton() {
+    cli();
+    if(!digitalRead(kbHighbeamSignalPin)) {
+        gResetLastPress = millis();
+        gIsResetPressed = true;
+    }
+    else {
+        gIsResetPressed = false;
+    }
+    sei();
 }
 
 void checkEncoderPinA()
@@ -97,14 +181,14 @@ void checkEncoderPinB()
         gEncoderTurnState = 0; // Если что-то пошло не так, возвращаем статус в исходное состояние
 }
 
+/**
+ * @brief Set gEncoderCount if rotate-cycle was finished 
+ */
 void setCount()
-{ // Устанавливаем значение счетчика
+{
     if (gEncoderTurnState == 4 || gEncoderTurnState == -4)
-    {                                                  // Если переменная gEncoderTurnState приняла заданное значение приращения
-        gEncoderCount += (int)(gEncoderTurnState / 4); // Увеличиваем/уменьшаем счетчик
-        gEncoderCount = constrain(gEncoderCount, -900, 900);
-        Gamepad.xAxis(map(gEncoderCount, -900, 900, -32768, 32767));
-        Gamepad.write();
-        gEncoderLastTurnTime = micros(); // Запоминаем последнее изменение
+    {
+        gEncoderCount += (int)(gEncoderTurnState / 4);
+        gEncoderLastTurnTime = micros();
     }
 }
