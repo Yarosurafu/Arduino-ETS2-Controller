@@ -34,6 +34,8 @@ enum Buttons {
 // -----------------------------
 
 // -----{ Encoder data }-----
+const int kEncoderMin = -750;
+const int kEncoderMax = 750;
 const int kEncoderPinA = 2;                     // Interrupt pin
 const int kEncoderPinB = 3;                     // Interrupt pin
 volatile const long kEncoderPauseMicros = 50;   // Pause for avoiding bounce
@@ -48,8 +50,10 @@ volatile bool gIsResetPressed = false;
 // ----------------------------
 
 // -----{ Pedals }-----
-const int kAcceleratorPin = 0; // Not connected yet
-const int kBrakePin = 0;       // Not connected yet
+const int kAcceleratorPin = A0;
+int gAcceleratorValue = 0;
+const int kBrakePin = A1;
+int gBrakeValue = 0;
 const int kClutchPin = 0;      // Not connected yet
 // --------------------
 
@@ -58,14 +62,16 @@ void setup()
     pinMode(kbLeftTurnPin, INPUT_PULLUP);
     pinMode(kbRightTurnPin, INPUT_PULLUP);
     pinMode(kbHighbeamSignalPin, INPUT_PULLUP);
+    pinMode(kAcceleratorPin, INPUT);
+    pinMode(kBrakePin, INPUT);
 
-    pinMode(kEncoderPinA, INPUT_PULLUP); // Пины в режим приема INPUT
+    pinMode(kEncoderPinA, INPUT_PULLUP);
     pinMode(kEncoderPinB, INPUT_PULLUP);
     digitalWrite(kEncoderPinA, HIGH);
-    digitalWrite(kEncoderPinB, HIGH); // Пины в режим приема INPUT
+    digitalWrite(kEncoderPinB, HIGH);
 
-    attachInterrupt(1, checkEncoderPinA, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала
-    attachInterrupt(0, checkEncoderPinB, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала
+    attachInterrupt(1, checkEncoderPinA, CHANGE);
+    attachInterrupt(0, checkEncoderPinB, CHANGE);
     attachInterrupt(4, highBeamButton, CHANGE);
 
 #ifdef DEBUG
@@ -85,8 +91,19 @@ void loop()
     setButton(RIGHT_TURN_BUTTON, !digitalRead(kbRightTurnPin));
     setButton(HIGHBEAM_SIGNAL_BUTTON, !digitalRead(kbHighbeamSignalPin));
 
-    gEncoderCount = constrain(gEncoderCount, -900, 900);
-    Gamepad.xAxis(map(gEncoderCount, -900, 900, -32768, 32767));
+    // Accelerator pedal
+    gAcceleratorValue = analogRead(kAcceleratorPin);
+    gAcceleratorValue = constrain(gAcceleratorValue, 177, 940);
+    Gamepad.zAxis(map(gAcceleratorValue, 177, 940, -128, 127));
+
+    //Brake pedal
+    gBrakeValue = analogRead(kBrakePin);
+    gBrakeValue = constrain(gBrakeValue, 2, 765);
+    gBrakeValue = 767 - gBrakeValue;
+    Gamepad.rzAxis(map(gBrakeValue, 2, 765, -128, 127));
+
+    gEncoderCount = constrain(gEncoderCount, kEncoderMin, kEncoderMax);
+    Gamepad.xAxis(map(gEncoderCount, kEncoderMin, kEncoderMax, -32768, 32767));
     Gamepad.write();
 
 #ifdef DEBUG
@@ -115,8 +132,6 @@ void setButton(uint8_t button, int signal) {
         Gamepad.press(button);
     else
         Gamepad.release(button);
-    
-    //Gamepad.write();
 }
 
 void highBeamButton() {
@@ -134,27 +149,27 @@ void highBeamButton() {
 void checkEncoderPinA()
 {
     if (micros() - gEncoderLastTurnTime < kEncoderPauseMicros)
-        return; // Если с момента последнего изменения состояния не прошло
-    // достаточно времени - выходим из прерывания
-    kEncoderPinAValue = digitalRead(kEncoderPinA); // Получаем состояние пинов A и B
+        return;
+    
+    kEncoderPinAValue = digitalRead(kEncoderPinA);
     kEncoderPinBValue = digitalRead(kEncoderPinB);
 
-    cli(); // Запрещаем обработку прерываний, чтобы не отвлекаться
+    cli();
     if (gEncoderTurnState == 0 && !kEncoderPinAValue && kEncoderPinBValue || gEncoderTurnState == 2 && kEncoderPinAValue && !kEncoderPinBValue)
     {
-        ++gEncoderTurnState; // Если выполняется условие, наращиваем переменную gEncoderTurnState
+        ++gEncoderTurnState;
         gEncoderLastTurnTime = micros();
     }
     if (gEncoderTurnState == -1 && !kEncoderPinAValue && !kEncoderPinBValue || gEncoderTurnState == -3 && kEncoderPinAValue && kEncoderPinBValue)
     {
-        --gEncoderTurnState; // Если выполняется условие, наращиваем в минус переменную gEncoderTurnState
+        --gEncoderTurnState;
         gEncoderLastTurnTime = micros();
     }
-    setCount(); // Проверяем не было ли полного шага из 4 изменений сигналов (2 импульсов)
-    sei();      // Разрешаем обработку прерываний
+    setCount();
+    sei();
 
     if (kEncoderPinAValue && kEncoderPinBValue && gEncoderTurnState != 0)
-        gEncoderTurnState = 0; // Если что-то пошло не так, возвращаем статус в исходное состояние
+        gEncoderTurnState = 0;
 }
 void checkEncoderPinB()
 {
@@ -166,19 +181,19 @@ void checkEncoderPinB()
     cli();
     if (gEncoderTurnState == 1 && !kEncoderPinAValue && !kEncoderPinBValue || gEncoderTurnState == 3 && kEncoderPinAValue && kEncoderPinBValue)
     {
-        ++gEncoderTurnState; // Если выполняется условие, наращиваем переменную gEncoderTurnState
+        ++gEncoderTurnState;
         gEncoderLastTurnTime = micros();
     }
     if (gEncoderTurnState == 0 && kEncoderPinAValue && !kEncoderPinBValue || gEncoderTurnState == -2 && !kEncoderPinAValue && kEncoderPinBValue)
     {
-        --gEncoderTurnState; // Если выполняется условие, наращиваем в минус переменную gEncoderTurnState
+        --gEncoderTurnState;
         gEncoderLastTurnTime = micros();
     }
-    setCount(); // Проверяем не было ли полного шага из 4 изменений сигналов (2 импульсов)
+    setCount();
     sei();
 
     if (kEncoderPinAValue && kEncoderPinBValue && gEncoderTurnState != 0)
-        gEncoderTurnState = 0; // Если что-то пошло не так, возвращаем статус в исходное состояние
+        gEncoderTurnState = 0;
 }
 
 /**

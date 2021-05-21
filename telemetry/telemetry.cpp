@@ -1,9 +1,3 @@
-/**
- * @brief Simple logger.
- *
- * Writes the output into file inside the current directory.
- */
-
 // Windows stuff.
 
 #ifdef _WIN32
@@ -257,59 +251,6 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 	}
 
 	const scs_telemetry_init_params_v101_t *const version_params = static_cast<const scs_telemetry_init_params_v101_t *>(params);
-	/*if (! init_log()) {
-		version_params->common.log(SCS_LOG_TYPE_error, "Unable to initialize the log file");
-		return SCS_RESULT_generic_error;
-	}*/
-
-	// Check application version. Note that this example uses fairly basic channels which are likely to be supported
-	// by any future SCS trucking game however more advanced application might want to at least warn the user if there
-	// is game or version they do not support.
-
-	//log_line("Game '%s' %u.%u", version_params->common.game_id, SCS_GET_MAJOR_VERSION(version_params->common.game_version), SCS_GET_MINOR_VERSION(version_params->common.game_version));
-	/*
-	if (strcmp(version_params->common.game_id, SCS_GAME_ID_EUT2) == 0) {
-
-		// Below the minimum version there might be some missing features (only minor change) or
-		// incompatible values (major change).
-
-		const scs_u32_t MINIMAL_VERSION = SCS_TELEMETRY_EUT2_GAME_VERSION_1_00;
-		if (version_params->common.game_version < MINIMAL_VERSION) {
-			log_line("WARNING: Too old version of the game, some features might behave incorrectly");
-		}
-
-		// Future versions are fine as long the major version is not changed.
-
-		const scs_u32_t IMPLEMENTED_VERSION = SCS_TELEMETRY_EUT2_GAME_VERSION_CURRENT;
-		if (SCS_GET_MAJOR_VERSION(version_params->common.game_version) > SCS_GET_MAJOR_VERSION(IMPLEMENTED_VERSION)) {
-			log_line("WARNING: Too new major version of the game, some features might behave incorrectly");
-		}
-	}
-	else if (strcmp(version_params->common.game_id, SCS_GAME_ID_ATS) == 0) {
-
-		// Below the minimum version there might be some missing features (only minor change) or
-		// incompatible values (major change).
-
-		const scs_u32_t MINIMAL_VERSION = SCS_TELEMETRY_ATS_GAME_VERSION_1_00;
-		if (version_params->common.game_version < MINIMAL_VERSION) {
-			log_line("WARNING: Too old version of the game, some features might behave incorrectly");
-		}
-
-		// Future versions are fine as long the major version is not changed.
-
-		const scs_u32_t IMPLEMENTED_VERSION = SCS_TELEMETRY_ATS_GAME_VERSION_CURRENT;
-		if (SCS_GET_MAJOR_VERSION(version_params->common.game_version) > SCS_GET_MAJOR_VERSION(IMPLEMENTED_VERSION)) {
-			log_line("WARNING: Too new major version of the game, some features might behave incorrectly");
-		}
-	}
-	else {
-		log_line("WARNING: Unsupported game, some features or values might behave incorrectly");
-	}*/
-
-	/*if (!dashboard.openCom()) {
-		version_params->common.log(SCS_LOG_TYPE_error, "Unable to open COM-port");
-		return SCS_RESULT_generic_error;
-	}*/
 
 	// Register for events. Note that failure to register those basic events
 	// likely indicates invalid usage of the api or some critical problem. As the
@@ -409,12 +350,5 @@ BOOL APIENTRY DllMain(
 		dashboard.closeCom();
 	}
 	return TRUE;
-}
-#endif
-
-#ifdef __linux__
-void __attribute__((destructor)) unload(void)
-{
-	finish_log();
 }
 #endif
