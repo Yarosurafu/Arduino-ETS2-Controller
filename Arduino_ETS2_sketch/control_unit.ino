@@ -75,7 +75,7 @@ void setup()
     attachInterrupt(4, highBeamButton, CHANGE);
 
 #ifdef DEBUG
-    Serial.begin(9600); // Включаем Serial
+    Serial.begin(9600);
 #endif
 
     Gamepad.begin();
